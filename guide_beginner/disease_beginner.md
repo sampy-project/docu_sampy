@@ -12,7 +12,7 @@ Currently, there are two main classes in Sampy representing diseases transmitted
 
 The chosen disease works as follows:
 
-1. agents can be in three states, suceptible (can be contaminated), infected (contracted the disease but cannot spread it) and contagious;
+1. agents can be in four states, suceptible (can be contaminated), infected (contracted the disease but cannot spread it), contagious and immuned;
 2. contagious agents have a user defined probability to contaminate each suceptible agents on their location;
 3. infected agents have a user defined probabilities to spend `k` timestep infected before moving to the contagious state (more details below);
 4. same thing for contagious agents;
@@ -71,7 +71,7 @@ for week in range(nb_year_simu * 52):
     # disease part
     disease.tick() # required to update disease status. if forgotten, nothing disease related
                    # will happen.
-    agents.move_around_territory(0.5, condition=agents.df_population['age'] >= 11)
+    agents.mov_around_territory(0.5, condition=agents.df_population['age'] >= 11)
     disease.simplified_contact_contagion(0.1, np.array([1, 2, 3, 4]), 
                                          np.array([0.25, 0.25, 0.25, 0.25]))
     disease.simplified_transition_between_states()
@@ -88,9 +88,87 @@ for week in range(nb_year_simu * 52):
                                                    condition=can_move)
 ```
 
-## how to extract data from the model
+## How to extract data from the model
 
 With these modifications, we have a script with a disease being unleashed at the center of the map. Now, we need to extract some epidemiological data from the simulation. There are several options, some built-in the disease object, and we list here the three main one.
 
-1. The most generic way to count agents satisfying some criterion is to use the population method `count_pop_per_vertex` with the kwarg `condition`.
+1. The most generic way to count agents satisfying some criterion is to use the population method `count_pop_per_vertex` with the kwarg `condition`. This kwargs expects a 1D array of boolean of shape `(nb_agents,)`, where `condition[i]` is True if the agents at line `i` of the population dataframe should be counted. This may seem convoluted, but it is actually very natural for people used to working with dataframes. in our case, if we want to count the number of infected and contagious agents, the syntax would be: 
+    ```python
+    infected_agents = agents.df_population['inf_disease'] | agents.df_population['con_disease']
+    agents.count_pop_per_vertex(condition=infected_agents)
+    # note that the name of the disease is used within these columns of the dataframe. If,
+    # for instance, the disease was named 'rabies', the columns would be named
+    # 'inf_rabies' and 'con_rabies'.
+    ```
+2. One of the most important epidemiological information one can need is the number of newly infected agents at each timestep. This data can easilly be extracted from the method `simplified_contact_contagion` by setting the kwarg `return_arr_newly_contaminated` to `True`. The syntax would be 
+    ```python
+    arr_new_infected = disease.simplified_contact_contagion(0.1, np.array([1, 2, 3, 4]), 
+                                                            np.array([0.25, 0.25, 0.25, 0.25]),
+                                                            return_arr_newly_contaminated=True)
+    nb_newly_infect_agents = arr_new_infected.sum() # to get the total number
+    count_newly_inf = agents.count_pop_per_vertex(condition=arr_new_infected) # new inf per vertex
+    ```
+3. Finally, the disease object itself provides a counting method, named `count_nb_status_per_vertex`, to count agents per vertex in a given status.
+    ```python
+    disease.count_nb_status_per_vertex('inf') # returns count of infected (not contagious) agents
+    disease.count_nb_status_per_vertex('con') # returns count of contagious agents
+    disease.count_nb_status_per_vertex('imm') # returns count of immuned agents
+    ```
+    Note that, in the case of a simulation including vaccination, the last count may include agents immuned through vaccination.
+
+Finally, a main loop in which the cumulative number of infected and contagious agents per vertices is extracted in a list `count_inf` may look something like this.
+
+```python
+nb_year_simu = 5
+count_inf = []
+for week in range(nb_year_simu * 52):
+
+    agents.increase_age()
+    agents.kill_too_old(52 * 6 - 1)
+    agents.natural_death_orm_methodology(arr_weekly_mortality, arr_weekly_mortality)
+    agents.kill_children_whose_mother_is_dead(11)
+
+    # disease part
+    disease.tick() # required to update disease status. if forgotten, nothing disease related
+                   # will happen.
+    agents.mov_around_territory(0.5, condition=agents.df_population['age'] >= 11)
+    disease.simplified_contact_contagion(0.1, np.array([1, 2, 3, 4]), 
+                                                       np.array([0.25, 0.25, 0.25, 0.25]),
+                                                       return_arr_newly_contaminated=True)
+    disease.simplified_transition_between_states(0.8, np.array([1, 2]), np.array([0.5, 0.5]))
+
+    # --- data extraction starts here
+    count_inf.append(agents.count_pop_per_vertex(condition=agents.df_population['inf_disease'] |
+                                                 agents.df_population['con_disease']))
+    # --- end of the extraction
+
+    disease.simplified_transition_between_states()
+
+    if week % 52 == 15:
+        agents.find_random_mate_on_position(1., position_attribute='territory')
+    if week % 52 == 22:
+        agents.create_offsprings_custom_prob(np.array([4, 5, 6, 7, 8, 9]), 
+                                             np.array([0.1, 0.2, 0.2, 0.2, 0.2, 0.1]))
+    if week % 52 == 40:
+        can_move = agents.df_population['age'] > 11
+        agents.dispersion_with_varying_nb_of_steps(np.array([1, 2, 3, 4]),
+                                                   np.array([.25, .25, .25, .25]),
+                                                   condition=can_move)
+```
+
+
+## Illustration of the disease spreading
+
+Here we illustrate the disease spread with a GIF made using the data extracted in the previous section.
+
+<p align="middle">
+  <img src="./assets/disease_spread.gif" width="50%" />
+</p>
+
+As a bonus, we also show the same animation but with a carrying capacity of 20 instead of 10 (which results in a population twice as dense as in the previous case). As expected the disease spreads way faster.
+
+<p align="middle">
+  <img src="./assets/disease_spread_k20.gif" width="50%" />
+</p>
+
 
