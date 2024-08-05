@@ -29,13 +29,13 @@ vaccination = BasicVaccination(disease=disease, duration_vaccine=156)
 Once created, this object should be used in the main loop of the model as follows.
 
 1. At the beginning of each iteration of the main loop, the method `update_vaccine_status` (does not take any parameters) should be called. Essentially, it performs a series of internal updates required for the vaccine to work properly.
-2. There are two main methods to apply vaccine to the population, `apply_vaccine_from_array` and `apply_vaccine_from_dict`. The former is more optimized but requires some understanding of Sampy's internal components, so we will focus on the latter. It expects two argument, the graph object and a dictionnary `dic`, whose keys are id of vertices and values are floats between 0 and 1. Basically, if a `vertex_id` is a key in this dictionnary, then each agent on `vertex_id` at the time of application has a probability of `dic[vertex_id]` to be vaccinated.
+2. There are two main methods to apply vaccine to the population, `apply_vaccine_from_array` and `apply_vaccine_from_dict`. The former is more optimized but requires some understanding of Sampy's internal components, so we will focus on the latter. It expects two argument, the graph object and a dictionnary `dic`, whose keys are id of vertices and values are floats between 0 and 1. Basically, if a `vertex_id` is a key in this dictionnary, then each agent on `vertex_id` at the time of application has a probability of `dic[vertex_id]` to be vaccinated. Note that, by default, only susceptible agents can recieve vaccine (not infected, nor contagious nor immuned).
 
 In the code, it looks like this.
 
 ```python
 # start of the main loop itself
-nb_year_simu = 5
+nb_year_simu = 3
 for week in range(nb_year_simu * 52):
 
     vaccination.update_vaccine_status()
@@ -44,3 +44,7 @@ for week in range(nb_year_simu * 52):
 
     # [rest of the loop]
 ```
+
+## Example
+
+
