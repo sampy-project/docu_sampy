@@ -6,10 +6,14 @@ Most objects in Sampy have a dataframe as attribute, storing various information
 
 A DataFrameXS is essentially a container for 1D numpy arrays, with a few quality of life features like the ability to shuffle its rows. It is design to feel like pandas dataframe, with a few notable difference.
 
-1. Columns of a dataframe `df` are created and accessed using square brackets:
+1. Similarly to pandas dataframe, columns of a DataFrameXS are created and accessed using square brackets.
     ```python
     df['name_column'] = some_1d_array # create a new column
+    x = df['name_column'] # get a REFERENCE to an already created column
     ```
+2. When a column is created, the dataframe stores it as a 1D numpy array. This never changes, i.e. contrary to what happens in Pandas, memory layout always remains the same within the dataframe.
+3. When retrieving a column, one get a reference to the underlying 1D array. This allows functions and methods to directly modify the values stored in columns. This is extremely useful for optimization. 
 
-## Why not Pandas?
+## How DataFrameXS works with Numba?
+
 
