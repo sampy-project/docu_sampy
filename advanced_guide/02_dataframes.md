@@ -17,4 +17,21 @@ A DataFrameXS is essentially a container for 1D numpy arrays, with a few quality
 
 ## How DataFrameXS works with Numba?
 
-Numba is a powerful library that allows to write compiled functions manipulating numpy arrays in pure python. Thanks to numba, we can write   
+### What is Numba?
+Numba is a powerful library that allows to write compiled functions manipulating numpy arrays in pure python. Thanks to numba, we can write computationaly efficient functions while keeping a hand on memory allocation. In order to properly describe what we mean with this last point, let us focus on a toy example. Let say that we have a one dimensional array of floats `X`, and that we want to modify the values in `X` in place as follows : if `X[i] < 0`, then we replace `X[i]` by `-X[i]`, else we replace it with `exp(X[i])`. With numba, such a function can be written as follows.
+
+```python
+@nb.njit
+def toy_func(X):
+    for i in range(X.shape[0]):
+        if X[i] >= 0:
+            X[i] = np.exp(X[i])
+        else:
+            X[i] = -X[i]
+```
+
+Note that, in this simple case, it is possible to write with numpy alone a function that will do this modification in place. However, it is in general more efficient and easier to read with Numba. 
+
+### Numba and DataFrameXS
+
+The core reason why the syntax `df['name_column']` returns a reference to the underlying numpy array (and not a copy or another type of object) is to allow them to be directly passed as parameters to numba-compiled functions, and allow them to be modified in place by such functions. This allows for efficient computation, since (properly written) functions decorated with numba are compiled, and since it gives a lot of control over memory allocation.
