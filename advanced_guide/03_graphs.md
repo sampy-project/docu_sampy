@@ -18,4 +18,8 @@ Even if the graphs used in Sampy are technically directed, in most cases if `x` 
 
 ## Connections array
 
-In mathematics, graphs are often encoded using an adjacency matrix, which are defined as follows. If G is a graph whose vertices are indexed with integer from 1 to `n` (where `n` is the number of vertices in G), then the adjacency matrix of G is a matrix of size `n x n`
+In mathematics, graphs are often encoded using an adjacency matrix, which are defined as follows. If `G` is a graph whose vertices are indexed with integer from 0 to `n-1` (where `n` is the number of vertices in `G`), then the adjacency matrix of `G` is the matrix `M` of size `n x n` such that `M[i, j] = 1` if there is an arrow from the vertex `i` to the vertex `j`, and 0 otherwise. 
+
+<p align="middle">
+  <img src="./assets/adjacency_matrix.png" width="50%" />
+</p>
