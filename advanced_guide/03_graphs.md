@@ -24,4 +24,4 @@ In mathematics, graphs are often encoded using an adjacency matrix, which are de
   <img src="./assets/adjacency_matrix.png" width="50%" />
 </p>
 
-Even if adjacency matrices are extremely useful in mathematics and informatics, they often are a quite inneficient way to encode graphs as is. Indeed, in most practical cases
+Even if adjacency matrices are extremely useful in mathematics and informatics, they often are a quite inneficient way to encode graphs as is. Indeed, in most practical cases those matrices are mostly filled with zeros. In most cases, adjacency matrices are encoded using "sparce matrices", but in our case we can do something more straightforward. 
