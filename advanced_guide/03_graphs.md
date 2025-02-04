@@ -24,4 +24,14 @@ In mathematics, graphs are often encoded using an adjacency matrix, which are de
   <img src="./assets/adjacency_matrix.png" width="50%" />
 </p>
 
-Even if adjacency matrices are extremely useful in mathematics and informatics, they often are a quite inneficient way to encode graphs as is. Indeed, in most practical cases those matrices are mostly filled with zeros. In most cases, adjacency matrices are encoded using "sparce matrices", but in our case we can do something more straightforward. 
+Even if adjacency matrices are extremely useful theoretical tools in mathematics and informatics, they often are memory inneficient to store graphs' structure. Indeed, in most practical cases those matrices are filled with zeros. Generally, adjacency matrices are encoded using "sparce matrices", but in our case we can do something more straightforward. Given the previous section, graphs in Sampy have the following properties.
+
+1. A graph in sampy has a small maximal out-degree (i.e. the maximal number of arrows coming out of any vertex). Typically, this number is below 10.
+2. The vast majority of the graph's vertices actually have this number as out-degree (the exceptions mostly happen at the borders of the map).
+
+If we denote by `D` the maximal out-degree of the graph, and `n` its number of vertices, then we can encode the graph' structure in a `n x D` array `C` as follows.
+
+1. `C` is an array of integers.
+2. `C[i, :]` is essentially the list of all the vertices `v` such that there is an arrow from `i` to `v`.
+3. de 
+
