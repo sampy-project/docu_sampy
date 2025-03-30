@@ -13,7 +13,7 @@ A DataFrameXS is essentially a container for 1D numpy arrays, with a few quality
     ```
 2. When a column is created, the dataframe stores it as a 1D numpy array. This never changes, i.e. contrary to what happens in Pandas, memory layout always remains the same within the dataframe.
 3. When retrieving a column, one get a reference to the underlying 1D array. This allows functions and methods to directly modify the values stored in columns, which is extremely useful for optimization. 
-4. For various reasons, DataFrameXS allow empty columns. When retrieving an empty column (which would generally happen if the dataframe is empty), one get a `None`. This may cause errors when trying to do array-like operation (such as `array > 0`). 
+4. For various reasons, DataFrameXS allow empty columns. When retrieving an empty column (which would generally happen if the dataframe is empty), one get a `None`. This may cause errors when trying to do array-like operation (such as `array > 0`). The fact that requesting en empty column returns `None` will likely change in the future, since it causes unecessary complications in ABMs' scripts.
 
 ## How DataFrameXS works with Numba?
 

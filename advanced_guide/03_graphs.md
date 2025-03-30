@@ -33,5 +33,17 @@ If we denote by `D` the maximal out-degree of the graph, and `n` its number of v
 
 1. `C` is an array of integers.
 2. `C[i, :]` is essentially the list of all the vertices `v` such that there is an arrow from `i` to `v`.
-3. de 
+3. The default value for the elements in `C` is `-1`. That is, if the vertex `i` has striclty less neighbours than `D`, then the 'extra-positions' available in `C[i, :]` are filled with `-1`. 
+
+Such an array is stored in a graph object under the attribute `connections`. 
+If we take the example of the graph shown in the previous figure, which has a maximal out-degree of two, its `connections` array would be
+
+```python
+[[1, -1],
+ [2, -1],
+ [-1, -1],
+ [0, 1]]
+```
+
+
 
