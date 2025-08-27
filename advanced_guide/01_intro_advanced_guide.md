@@ -10,3 +10,4 @@ This guide covers the following topics.
 2. How graphs are encoded.
 3. Population objects.
 4. How objects are designed in Sampy using multiple-inheritance and how to add new components.
+5. Testing in SamPy

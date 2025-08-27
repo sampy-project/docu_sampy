@@ -1,6 +1,6 @@
 # Population objects
 
-As explained briefly in the ReadMe, SamPy do not provide individual objects for the agents. Instead, SamPy provides population object which, as their name suggest, represent collections of agents. Typically, in an ecological simulation involving `N` number of species, there will be `N` population objects (one for each species).
+As explained briefly in the ReadMe, SamPy do not provide individual objects for the agents. Instead, SamPy provides population object which, as their names suggest, represent collections of agents. Typically, in an ecological simulation involving `N` number of species, there will be `N` population objects (one for each species).
 
 ## Dataframe df_population and memory layout of agents attributes
 
@@ -11,6 +11,10 @@ Assume our agents have three attributes called `A`, `B` and `C`, then `df_popula
 Since our dataframes' columns are numpy arrays, those attributes are stored in memory in contiguous blocks (one for each attribute).
 
 ## Difference with usual ABM frameworks and why it increases performances
+
+<p align="middle">
+  <img src="./assets/mem_sampy_vs_other.png" width="50%" />
+</p>
 
 ## Focus on the position of each agent 
 
