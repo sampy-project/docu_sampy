@@ -12,17 +12,17 @@ Currently, there are two main classes in Sampy representing diseases transmitted
 
 The chosen disease works as follows:
 
-1. agents can be in four states, suceptible (can be contaminated), infected (contracted the disease but cannot spread it), contagious and immuned;
-2. contagious agents have a user defined probability to contaminate each suceptible agents on their location;
+1. agents can be in four states, susceptible (can be contaminated), infected (contracted the disease but cannot spread it), contagious and immuned;
+2. contagious agents have a user defined probability to contaminate each susceptible agents on their location;
 3. infected agents have a user defined probabilities to spend `k` timestep infected before moving to the contagious state (more details below);
-4. same thing for contagious agents;
+4. same thing for contagious agents: they have a user defined probabilities to spend `q` timesteps contagious;
 5. at the end of their contagious period, agents have a user defined probability to die and agents who survive become permanently immuned.
 
 The methods defining how many timesteps agents are supposed to stay in each state (infected or contagious) expect parameters to be provided in the form of two arrays, `arr_nb_timesteps` (positive integers) and `arr_prob_timesteps` (floats, sums to 1.), where `arr_prob_timesteps[i]` is the probability for an agent to spend `arr_nb_timesteps[i]` timesteps in the considered state.
 
 ## How to use it in the code?
 
-A disease object works the same as any other object from Sampy: we first istanciate it (with some parameters given as kwargs) and then use methods from the obtained object to model the disease's dynamic. The disease object can be imported and instanciated as follows:
+A disease object works the same as any other object from Sampy: we first instanciate it (with some parameters given as kwargs) and then use methods from the obtained object to model the disease's dynamic. The disease object can be imported and instanciated as follows:
 
 ```python
 from sampy.disease.single_species.builtin_disease import ContactCustomProbTransitionPermanentImmunity
@@ -39,11 +39,11 @@ As shown above, a disease with default settings only needs a host (population ob
 3. `arr_timesteps`: the 1D array of int `arr_nb_timesteps` described in section "How does the disease work" corresponding to the incubation period.
 4. `arr_prob_timesteps`: the 1D array of float described in section "How does the disease work" corresponding to the incubation period.
 
-In code, starting the disease at the four central cell with a level of 25% looks as follows
+In code, starting the disease at the four central cell with a level of 35% looks as follows
 
 ```python
 disease.simplified_contaminate_vertices([(50, 50), (51, 50), (50, 51), (51, 51)], 
-                                        0.25, np.array([1, 2, 3, 4]), 
+                                        0.35, np.array([1, 2, 3, 4]), 
                                         np.array([0.25, 0.25, 0.25, 0.25]))
 ```
 
@@ -74,7 +74,7 @@ for week in range(nb_year_simu * 52):
     agents.mov_around_territory(0.5, condition=agents.df_population['age'] >= 11)
     disease.simplified_contact_contagion(0.1, np.array([1, 2, 3, 4]), 
                                          np.array([0.25, 0.25, 0.25, 0.25]))
-    disease.simplified_transition_between_states()
+    disease.simplified_transition_between_states(0.8, np.array([1, 2]), np.array([0.5, 0.5]))
 
     if week % 52 == 15:
         agents.find_random_mate_on_position(1., position_attribute='territory')
@@ -94,8 +94,8 @@ With these modifications, we have a script with a disease being unleashed at the
 
 1. The most generic way to count agents satisfying some criterion is to use the population method `count_pop_per_vertex` with the kwarg `condition`. This kwargs expects a 1D array of boolean of shape `(nb_agents,)`, where `condition[i]` is True if the agents at line `i` of the population dataframe should be counted. This may seem convoluted, but it is actually very natural for people used to working with dataframes. in our case, if we want to count the number of infected and contagious agents, the syntax would be: 
     ```python
-    infected_agents = agents.df_population['inf_disease'] | agents.df_population['con_disease']
-    agents.count_pop_per_vertex(condition=infected_agents)
+    contaminated_agents = agents.df_population['inf_disease'] | agents.df_population['con_disease']
+    agents.count_pop_per_vertex(condition=contaminated_agents)
     # note that the name of the disease is used within these columns of the dataframe. If,
     # for instance, the disease was named 'rabies', the columns would be named
     # 'inf_rabies' and 'con_rabies'.
