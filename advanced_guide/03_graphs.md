@@ -18,7 +18,7 @@ In our applications, graphs are mostly used to represent 2D grids, generally squ
 
 ## Connections array
 
-In mathematics, graphs are often encoded using an adjacency matrix, which are defined as follows. If `G` is a graph whose vertices are indexed with integer from 0 to `n-1` (where `n` is the number of vertices in `G`), then the adjacency matrix of `G` is the matrix `M` of size `n x n` such that `M[i, j] = 1` if there is an arrow from the vertex `i` to the vertex `j`, and 0 otherwise. We show on the following figure an example of such a matrix.
+In mathematics, graphs are often encoded using an adjacency matrix, which are defined as follows. If `G` is a graph whose vertices are indexed with integer from 0 to `n-1` (where `n` is the number of vertices in `G`), then the adjacency matrix of `G` is the matrix `M` of size `n x n` such that `M[i, j] = 1` if there is an arrow from the vertex `i` to the vertex `j`, and `M[i, j] = 0` if there is no arrow from `i` to `j`. We show on the following figure an example of such a matrix.
 
 <p align="middle">
   <img src="./assets/adjacency_matrix.png" width="50%" />
