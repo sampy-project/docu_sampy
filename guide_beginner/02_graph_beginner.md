@@ -1,6 +1,6 @@
 # How to chose and construct a square grid
 
-The first step in the construction of any model using Sampy is to chose the space on which the agents live. In the current version of Sampy, space is encoded using a graph-based approach that we now describe (note that there are other type of spaces planned for the future).
+The first step in the construction of any model using SamPy is to chose the space on which the agents live. In the current version of SamPy, space is encoded using a graph-based approach that we now describe (note that there are other type of spaces planned for the future).
 
 ## Graphs in Sampy
 
@@ -8,11 +8,11 @@ Conceptually, a graph is a set of vertices linked together by edges. Graphically
 
 [include figure]
 
-In sampy, agents live on the vertices of a graph and move according to its edges. As such, you can think of vertices as representing patches of land and you can visualize an edge between two vertices as meaning that the corresponding patches of land are neighbours. Finally, note that edges in Sampy are weighted, and a given weight represents the probability for an agent to move along the associated edge. 
+In SamPy, agents live on the vertices of a graph and move according to its edges. As such, you can think of vertices as representing patches of land and you can visualize an edge between two vertices as meaning that the corresponding patches of land are neighbours. Finally, note that edges in SamPy are weighted, and a given weight represents the probability for an agent to move along the associated edge. 
 
 ## The two main square grids
 
-Sampy provides several built-in graph adapted to a variety of situations. In the current tutorial, we want the space to be a square grid and Sampy provides two options for representing one using graphs, respectively called `SquareGrid` and `SquareGridWithDiag`. They differ by their set of edges, as shown below.
+SamPy provides several built-in graph adapted to a variety of situations. In the current tutorial, we want the space to be a square grid and SamPy provides two options for representing one using graphs, respectively called `SquareGrid` and `SquareGridWithDiag`. They differ by their set of edges, as shown below.
 
 <p align="middle">
   <img src="./assets/two_square_grids.png" width="50%" />
