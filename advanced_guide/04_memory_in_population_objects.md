@@ -8,13 +8,22 @@ Each population object as an attribute called `df_population`, which is a DataFr
 
 Assume our agents have three attributes called `A`, `B` and `C`, then `df_population` has three columns named, you guessed it, `A`, `B` and `C`. Each row of the dataframe corresponds to exactly one agent in the population, and the attributes of the agents at row `i` are simply `df_population['A'][i]`, `df_population['B'][i]` and `df_population['C'][i]`.
 
-Since our dataframes' columns are numpy arrays, those attributes are stored in memory in contiguous blocks (one for each attribute).
-
-## Difference with usual ABM frameworks and why it increases performances
+Since our dataframes' columns are numpy arrays, those attributes are stored in memory in contiguous blocks (one for each attribute). With the above example, the memory layout could look something as shown in the following figure.
 
 <p align="middle">
-  <img src="./assets/mem_sampy_vs_other.png" width="50%" />
+  <img src="./assets/mem_sampy.png" width="50%" />
 </p>
+
+## Consequence of this memory layout on performance
+
+As explained in the README, SamPy is designed to work best with a specific activation scheme. 
+
+```python
+for timestep in range(nb_timesteps):
+    agents.perform_action_1(some_param_1)
+    agents.perform_action_2(some_param_2)
+    agents.perform_action_3(some_param_3)
+```
 
 ## Focus on the position of each agent 
 
